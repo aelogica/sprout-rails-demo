@@ -61,9 +61,7 @@ Todos.todoListController = SC.ArrayController.create({
   // to the array.
 
   createTodo: function(title) {
-    var todo = Todos.Todo.create({ title: title });
-
-    this.pushObject(todo);
+    Todos.store.createRecord(Todos.Todo, { title: title })
   },
 
   remaining: function() {
@@ -71,7 +69,9 @@ Todos.todoListController = SC.ArrayController.create({
   }.property('@each.isDone'),
 
   clearCompletedTodos: function() {
-    this.filterProperty('isDone', true).forEach(this.removeObject, this);
+    this.filterProperty('isDone', true).forEach(function(item) {
+      item.destroy();
+    });
   },
 
   allAreDone: function(key, value) {
